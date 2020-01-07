@@ -5,10 +5,12 @@ sfn_client = boto3.client('stepfunctions', region_name='us-west-2')
 sf_arn = os.environ['STEP_FUNCTION_ARN']
 
 def lambda_handler(event, context):
+    """
+    This Lambda handler cosumes messages from an SQS queue and invokes a Step Function for each message.
+    """
     print(f"Event : {event}")
     
-    records = event['Records']
-    for i, record in enumerate(records):
+    for i, record in enumerate(event['Records']):
         state_id = json.loads(record['body'])['state_id']
         try:
             sf_name = f"StepFunction_{state_id}_{i}"
