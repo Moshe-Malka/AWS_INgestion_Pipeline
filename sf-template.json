@@ -4,12 +4,12 @@
   "States": {
     "Run-CSV-Crawler": {
       "Type": "Task",
-      "Resource": "arn:aws:lambda:us-west-2:458558152824:function:Run-Crawler",
+      "Resource": "<FILL_THIS>",
       "Next": "Check-CSV-Crawler-State"
     },
     "Check-CSV-Crawler-State": {
       "Type": "Task",
-      "Resource": "arn:aws:lambda:us-west-2:458558152824:function:file-ingester-check-crawler-state",
+      "Resource": "<FILL_THIS>",
       "Next": "Is CSV Crawler Done?"
     },
     "Is CSV Crawler Done?":{
@@ -34,7 +34,7 @@
     },
     "Notify-Queue":{
       "Type": "Task",
-      "Resource": "arn:aws:lambda:us-west-2:458558152824:function:Queue-Notifier",
+      "Resource": "<FILL_THIS>",
       "Next": "Exacution-Succeeded"
     },
     "Wait-1-Minute": {
