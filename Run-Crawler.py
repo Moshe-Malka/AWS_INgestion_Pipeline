@@ -7,7 +7,7 @@ glue_db_name = os.environ['DB_NAME']
         
 def create_crawler(name, dest):
     try:
-        glue_client.create_crawler(Name=name, Role='arn:aws:iam::458558152824:role/GlueCrawlerRole', DatabaseName=glue_db_name, Targets={'S3Targets' : [{'Path': f"s3://{dest}"}]})
+        glue_client.create_crawler(Name=name, Role='<FILL_THIS>', DatabaseName=glue_db_name, Targets={'S3Targets' : [{'Path': f"s3://{dest}"}]})
         print(f"Succefully created new crawler with name <{name}>.")
     except Exception as e:
         print(f"Failed to create new crawler with name <{name}>.")
@@ -43,29 +43,4 @@ def lambda_handler(event, context):
     run_crawler(crawler_name)
     
     return { 'crawler_name' : crawler_name, 'tables' : event['tables'], 'crawler_destination': crawler_destination }
-    
-    """
-    {
-      "job_state": "RUNNING",
-      "glue_job_run_id": "jr_d09fbb3af196eb45952a98ed95c7b0ddfded3271949fd852be6eba6e7470c197",
-      "glue_job_name": "unziper-script",
-      "s3_event": {
-        "s3SchemaVersion": "1.0",
-        "configurationId": "ingestion",
-        "bucket": {
-          "name": "files-drop-point",
-          "ownerIdentity": {
-            "principalId": "A1DJ495R6WJ3IV"
-          },
-          "arn": "arn:aws:s3:::files-drop-point"
-        },
-        "object": {
-          "key": "raw/comp.csv.zip",
-          "size": 565,
-          "eTag": "96ac59907ab1ab60adb49abc5368fce7",
-          "sequencer": "005E04B2CD549FFA79"
-        }
-      }
-    }
-
-    """
+  
