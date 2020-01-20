@@ -1,0 +1,149 @@
+{
+  "Comment": "A State Machine to crawel and transform our files.",
+  "StartAt": "Run-CSV-Crawler",
+  "States": {
+    "Run-CSV-Crawler": {
+      "Type": "Task",
+      "Resource": "<FILL_THIS>",
+      "Next": "Check-CSV-Crawler-State"
+    },
+    "Check-CSV-Crawler-State": {
+      "Type": "Task",
+      "Resource": "<FILL_THIS>",
+      "Next": "Is CSV Crawler Done?"
+    },
+    "Is CSV Crawler Done?":{
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.crawler_state",
+          "StringEquals": "READY",
+          "Next": "Run-CSV-To-Parquet-Job"
+        },
+        {
+          "Variable": "$.crawler_state",
+          "StringEquals": "RUNNING",
+          "Next": "Wait-1-Minute"
+        },
+        {
+          "Variable": "$.crawler_state",
+          "StringEquals": "STOPPING",
+          "Next": "Run-CSV-To-Parquet-Job"
+        }
+      ],"Default": "Exacution-Failed"
+    },
+    "Run-CSV-To-Parquet-Job": {
+      "Type": "Task",
+      "Resource": "<FILL_THIS>",
+      "Next": "Check-Converter-Job"
+    },
+    "Check-Converter-Job":{
+      "Type": "Task",
+      "Resource": "<FILL_THIS>",
+      "Next": "Is Converter Job Done?"
+    },
+    "Is Converter Job Done?":{
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.job_state",
+          "StringEquals": "STOPPED",
+          "Next": "Exacution-Failed"
+        },
+        {
+          "Variable": "$.job_state",
+          "StringEquals": "FAILED",
+          "Next": "Exacution-Failed"
+        },
+        {
+          "Variable": "$.job_state",
+          "StringEquals": "TIMEOUT",
+          "Next": "Exacution-Failed"
+        },
+        {
+          "Variable": "$.job_state",
+          "StringEquals": "READY",
+          "Next": "Run-Parquet-Crawler"
+        },
+        {
+          "Variable": "$.job_state",
+          "StringEquals": "SUCCEEDED",
+          "Next": "Run-Parquet-Crawler"
+        },
+        {
+          "Variable": "$.job_state",
+          "StringEquals": "RUNNING",
+          "Next": "Wait-2-Minutes"
+        },
+        {
+          "Variable": "$.job_state",
+          "StringEquals": "STARTING",
+          "Next": "Wait-2-Minutes"
+        },
+        {
+          "Variable": "$.job_state",
+          "StringEquals": "STOPPING",
+          "Next": "Run-Parquet-Crawler"
+        }
+      ],"Default": "Exacution-Failed"
+    },
+    "Wait-2-Minutes": {
+      "Type": "Wait",
+      "Seconds": 120,
+      "Next": "Check-Converter-Job"
+    }, 
+    "Run-Parquet-Crawler":{
+      "Type": "Task",
+      "Resource": "<FILL_THIS>",
+      "Next": "Check-Parquet-Crawler"
+    },
+    "Check-Parquet-Crawler":{
+      "Type": "Task",
+      "Resource": "<FILL_THIS>",
+      "Next": "Is Parquet Crawler Done?"
+    },
+    "Is Parquet Crawler Done?":{
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.crawler_state",
+          "StringEquals": "READY",
+          "Next": "Update-Dynamo"
+        },
+        {
+          "Variable": "$.crawler_state",
+          "StringEquals": "RUNNING",
+          "Next": "Wait-1-Minute_2"
+        },
+        {
+          "Variable": "$.crawler_state",
+          "StringEquals": "STOPPING",
+          "Next": "Wait-1-Minute_2"
+        }
+      ],"Default": "Exacution-Failed"
+    },
+    "Update-Dynamo": {
+      "Type": "Task",
+      "Resource": "<FILL_THIS>",
+      "Next": "Exacution-Succeeded"
+    },
+    "Wait-1-Minute": {
+      "Type": "Wait",
+      "Seconds": 60,
+      "Next": "Check-CSV-Crawler-State"
+    }, 
+    "Wait-1-Minute_2": {
+      "Type": "Wait",
+      "Seconds": 60,
+      "Next": "Check-Parquet-Crawler"
+    },  
+    "Exacution-Failed":{
+      "Type": "Fail",
+      "Cause": "Invalid response.",
+      "Error": "ErrorA"
+    },
+    "Exacution-Succeeded": {
+      "Type": "Succeed"
+    }
+  }
+}
