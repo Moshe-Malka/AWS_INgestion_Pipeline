@@ -1,0 +1,28 @@
+{
+    "manifest-list":[
+        {
+            "etl-id": "kuba-burgol-c2",
+            "files":[
+                "dayOfWeek_lookup_table",
+                "location_lookup_table",
+                "hamustaTaxi_tripdata"
+            ]
+        },
+        {
+            "etl-id": "ETL_2",
+            "files":[
+                "file1",
+                "file2",
+                "file3"
+            ]
+        },
+        {
+            "etl-id": "ETL_3",
+            "files":[
+                "file1",
+                "file2",
+                "file3"
+            ]
+        }
+    ]
+}
